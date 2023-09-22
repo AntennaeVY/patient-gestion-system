@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  PATIENT
+  RECEPCIONIST
+  DOCTOR
+}
+
+enum Gender {
+  M
+  F
+}
+
+enum Weekday {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model Account {
+  id               String           @db.VarChar(50)  @id
+  name             String           @db.VarChar(50) 
+  last_name        String           @db.VarChar(50)
+  email            String           @db.VarChar(255) @unique
+  password         String           @db.VarChar(255)
+  role             Role
+  avatar_url       String           @db.VarChar(255) @unique
+  contact_info     String           @unique
+  birthday         DateTime         @db.Date
+  gender           Gender
+  created_at       DateTime         @db.Timestamp()  @default(now())
+
+  // Relations
+  contact          Contact          @relation(fields: [contact_info], references: [id])
+  doctor           Doctor?
+  appointments     Appointment[]
+}
+
+model Contact {
+  id               String           @id              @default(uuid())
+  country          String           @db.VarChar(50)
+  state            String           @db.VarChar(50) 
+  city             String           @db.VarChar(50)
+  street           String           @db.VarChar(255)
+  suite            String?          @db.VarChar(50)
+  primary_phone    String           @db.VarChar(20)  @unique
+  secondary_phone  String?          @db.VarChar(20)
+
+  // Prisma relations
+  account           Account?
+}
+
+model Doctor {
+  id               String           @db.VarChar(50)   @id
+  signature_url    String           @db.VarChar(255)  @unique
+  certificate_url  String           @db.VarChar(255)  @unique  
+  account_id       String           @unique
+
+  // Prisma relations
+  account         Account           @relation(fields: [account_id], references: [id])
+  shifts          DoctorShift[]
+  appointments    Appointment[]
+} 
+
+model Appointment {
+  id              String    @default(uuid())  @id
+  patient_id      String
+  doctor_id       String
+  report_url      String    @db.VarChar(255)  @unique
+  date            DateTime  @db.Date
+  start_time      DateTime  @db.Time
+  end_time        DateTime  @db.Time
+  room            String    @db.VarChar(50)
+
+  // Prisma relations
+  patient         Account   @relation(fields: [patient_id], references: [id])
+  doctor          Doctor    @relation(fields: [doctor_id], references: [id])
+
+}
+
+model DoctorShift {
+  id              String    @id               @default(uuid())
+  doctor_id       String
+  day             Weekday
+  start_time      DateTime  @db.Time
+  end_time        DateTime  @db.Time  
+
+  // Prisma relations
+  doctor          Doctor    @relation(fields: [doctor_id], references: [id])
+}
