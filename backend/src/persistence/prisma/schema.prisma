@@ -32,14 +32,20 @@ enum Weekday {
   SUNDAY
 }
 
+enum AppointmentStatus {
+  BOOKED
+  PENDING
+  DONE
+}
+
 model Account {
   id               String           @db.VarChar(50)  @id
   name             String           @db.VarChar(50) 
   last_name        String           @db.VarChar(50)
   email            String           @db.VarChar(255) @unique
   password         String           @db.VarChar(255)
-  role             Role
-  avatar_url       String           @db.VarChar(255) @unique
+  role             Role             @default(PATIENT)
+  avatar_url       String?          @db.VarChar(255) @default("https://i.imgur.com/Zs3EoeR.png")
   contact_info     String           @unique
   birthday         DateTime         @db.Date
   gender           Gender
@@ -78,28 +84,29 @@ model Doctor {
 } 
 
 model Appointment {
-  id              String    @default(uuid())  @id
+  id              String            @default(uuid())  @id
   patient_id      String
   doctor_id       String
-  report_url      String    @db.VarChar(255)  @unique
-  date            DateTime  @db.Date
-  start_time      DateTime  @db.Time
-  end_time        DateTime  @db.Time
-  room            String    @db.VarChar(50)
+  report_url      String            @db.VarChar(255)  @unique
+  status          AppointmentStatus @default(BOOKED)
+  date            DateTime          @db.Date
+  start_time      DateTime          @db.Time
+  end_time        DateTime          @db.Time
+  room            String            @db.VarChar(50)
 
   // Prisma relations
-  patient         Account   @relation(fields: [patient_id], references: [id])
-  doctor          Doctor    @relation(fields: [doctor_id], references: [id])
+  patient         Account           @relation(fields: [patient_id], references: [id])
+  doctor          Doctor            @relation(fields: [doctor_id], references: [id])
 
 }
 
 model DoctorShift {
-  id              String    @id               @default(uuid())
+  id              String            @id               @default(uuid())
   doctor_id       String
   day             Weekday
-  start_time      DateTime  @db.Time
-  end_time        DateTime  @db.Time  
+  start_time      DateTime          @db.Time
+  end_time        DateTime          @db.Time  
 
   // Prisma relations
-  doctor          Doctor    @relation(fields: [doctor_id], references: [id])
+  doctor          Doctor            @relation(fields: [doctor_id], references: [id])
 }
