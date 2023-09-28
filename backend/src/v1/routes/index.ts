@@ -1,5 +1,6 @@
 import { IRouter } from "express";
-import authRoutes from "./auth.routes"
+
+import authRoutes from "../auth/routes/auth.routes"
 
 const routes: IRouter[] = [authRoutes];
 

@@ -38,6 +38,11 @@ enum AppointmentStatus {
   DONE
 }
 
+enum AccountStatus {
+  VERIFIED
+  UNVERIFIED
+}
+
 model Account {
   id               String           @db.VarChar(50)  @id
   name             String           @db.VarChar(50) 
@@ -49,6 +54,7 @@ model Account {
   contact_info     String           @unique
   birthday         DateTime         @db.Date
   gender           Gender
+  status           AccountStatus    @default(UNVERIFIED)
   created_at       DateTime         @db.Timestamp()  @default(now())
 
   // Relations
