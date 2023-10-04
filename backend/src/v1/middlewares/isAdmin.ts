@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import responses from "../../libs/http";
-import { TokenPayload } from "../../libs/token";
+import responses from "../libs/http";
+import { TokenPayload } from "../libs/token";
 
 export function isAdminMiddleware(
   req: Request & { user?: TokenPayload; isAdmin?: boolean },

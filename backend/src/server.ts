@@ -1,7 +1,7 @@
 import express from "express";
 
 import routes from "./v1/routes";
-import { loadEnvironmentVariables } from "./libs/misc";
+import { loadEnvironmentVariables } from "./v1/libs/misc";
 
 loadEnvironmentVariables(".env");
 const PORT = process.env.PORT as string;

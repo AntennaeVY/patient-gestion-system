@@ -1,21 +1,18 @@
 import { Request, Response } from "express";
 import { TokenPayload } from "../../../libs/token";
+import { getAllPatientsService } from "../services/getAllPatients.service";
 import responses from "../../../libs/http";
-import { getAccountService } from "../services/getAccount.service.";
 
-export function getAccountController(
+export function getAllPatientsController(
   req: Request & { user?: TokenPayload; isAdmin?: boolean },
-  res: Response
+  res: Response,
 ) {
   try {
-    const { id } = req.params;
+    // This needs to be paginated
 
-    getAccountService(id)
-      .then(({ code, data }) => {
-        if (code == 404) 
-			return responses.notFound(res, { error: data });
-
-        return responses.success(res, { account: data });
+    getAllPatientsService()
+      .then((patients) => {
+        return responses.success(res, { patients: patients });
       })
       .catch((err) => {
         console.log(err);

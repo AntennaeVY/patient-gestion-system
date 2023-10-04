@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Prisma } from "@prisma/client";
 
 import responses from "../../../libs/http";
-import AccountType from "../../types";
+import AccountType from "../../../types";
 import { registerAccountService } from "../services/registerAccount.service";
 
 export function registerController(req: Request, res: Response) {

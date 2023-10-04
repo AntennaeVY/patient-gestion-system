@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { isAuthMiddleware } from "../../middlewares/isAuth";
+import { isAuthMiddleware } from "../../../middlewares/isAuth";
 import { getAccountController } from "../controllers/getAccount.controller";
-import { isAdminMiddleware } from "../../middlewares/isAdmin";
+import { isAdminMiddleware } from "../../../middlewares/isAdmin";
 
 const router = Router();
 

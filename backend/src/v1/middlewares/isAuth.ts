@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import responses from "../../libs/http";
-import { TokenPayload, decodeAuthHeader, decodeToken } from "../../libs/token";
+import responses from "../libs/http";
+import { TokenPayload, decodeAuthHeader, decodeToken } from "../libs/token";
 
 export function isAuthMiddleware(
   req: Request & {user?: TokenPayload, isAdmin?: boolean},

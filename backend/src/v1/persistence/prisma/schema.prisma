@@ -43,6 +43,11 @@ enum AccountStatus {
   UNVERIFIED
 }
 
+enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+}
+
 model Account {
   id               String           @db.VarChar(50)  @id
   name             String           @db.VarChar(50) 
@@ -79,20 +84,24 @@ model Contact {
 
 model Doctor {
   id               String           @db.VarChar(50)   @id
+  account_id       String           @unique
   signature_url    String           @db.VarChar(255)  @unique
   certificate_url  String           @db.VarChar(255)  @unique  
-  account_id       String           @unique
+  specialization   String           @db.VarChar(50)    
+
 
   // Prisma relations
   account         Account           @relation(fields: [account_id], references: [id])
   shifts          DoctorShift[]
   appointments    Appointment[]
+  services        Service[]
 } 
 
 model Appointment {
   id              String            @default(uuid())  @id
   patient_id      String
   doctor_id       String
+  description     String?           @db.VarChar(255)
   report_url      String            @db.VarChar(255)  @unique
   status          AppointmentStatus @default(BOOKED)
   date            DateTime          @db.Date
@@ -103,7 +112,7 @@ model Appointment {
   // Prisma relations
   patient         Account           @relation(fields: [patient_id], references: [id])
   doctor          Doctor            @relation(fields: [doctor_id], references: [id])
-
+  services        Service[]
 }
 
 model DoctorShift {
@@ -115,4 +124,16 @@ model DoctorShift {
 
   // Prisma relations
   doctor          Doctor            @relation(fields: [doctor_id], references: [id])
+}
+
+model Service {
+  id              String            @id               @default(uuid())
+  name            String            @db.VarChar(50)   
+  status          ServiceStatus     
+  duration        DateTime          @db.Time()
+  price           Decimal           @db.Money()
+
+  // Prisma relations
+  doctors         Doctor[]
+  appointments    Appointment[]
 }

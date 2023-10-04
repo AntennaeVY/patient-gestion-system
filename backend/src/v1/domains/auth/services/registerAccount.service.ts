@@ -1,6 +1,6 @@
 import { hashString } from "../../../libs/hash";
 import { prisma } from "../../../persistence/prisma/client";
-import AccountType from "../../types";
+import AccountType from "../../../types";
 
 export async function registerAccountService(registerDto: AccountType) {
   const { contact_info, ...accountData } = registerDto;

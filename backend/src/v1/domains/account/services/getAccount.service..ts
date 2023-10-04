@@ -7,9 +7,9 @@ export async function getAccountService(id: string) {
   });
 
   if (!accountOrNull) 
-    return { code: 404, data: "Usuario no encontrado" };
+    return null;
 
   const accountWithoutPassword = exclude(accountOrNull, ["password"]);
 
-  return { code: 200, data: accountWithoutPassword };
+  return accountWithoutPassword;
 }
