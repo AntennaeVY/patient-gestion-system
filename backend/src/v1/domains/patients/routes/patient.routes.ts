@@ -8,6 +8,8 @@ import { getAllPatientsController } from "../controllers/getAllPatients.controll
 import { updateAccountGuard } from "../../account/guards/updateAccount.guard";
 import { updatePatientGuard } from "../guards/updatePatient.guard";
 import { updatePatientController } from "../controllers/updatePatient.controller";
+import { deletePatientGuard } from "../guards/deletePatient.guard";
+import { deletePatientController } from "../controllers/deletePatient.controller";
 
 const router = Router();
 
@@ -31,6 +33,13 @@ router.patch(
   updateAccountGuard,
   updatePatientGuard,
   updatePatientController
+)
+
+router.delete(
+  "/patients/:id",
+  isAuthMiddleware,
+  deletePatientGuard,
+  deletePatientController
 )
 
 export default router;
