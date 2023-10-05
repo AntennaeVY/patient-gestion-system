@@ -12,5 +12,5 @@ export function isAdminMiddleware(
       error: "No tienes permiso para ejecutar esta acción",
     });
 
-	next();
+  return next();
 }

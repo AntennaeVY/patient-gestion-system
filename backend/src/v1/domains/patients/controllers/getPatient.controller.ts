@@ -19,12 +19,12 @@ export function getPatientController(
         return responses.success(res, { patient: patientOrNull });
       })
       .catch((err) => {
-		console.log(err);
+        console.log(err);
 
-		return responses.internalError(res, { error: "Internal Server Error"});
-	  });
+        return responses.internalError(res, { error: "Internal Server Error" });
+      });
   } catch (err) {
-	console.log(err);
+    console.log(err);
 
     return responses.internalError(res, { error: "Internal Server Error" });
   }

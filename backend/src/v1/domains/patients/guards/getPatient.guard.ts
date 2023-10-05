@@ -8,11 +8,14 @@ export function getPatientGuard(
   next: NextFunction
 ) {
   try {
-    if (req.isAdmin || req.user?.role == "RECEPCIONIST") 
-	  next();
+    if (
+      req.isAdmin ||
+      req.user?.role == "RECEPCIONIST" ||
+      req.user?.id == req.params.id
+    )
+      return next();
 
-    if (req.user?.id != req.params.id)
-      return responses.notFound(res, { error: "Usuario no encontrado" });
+    return responses.notFound(res, { error: "Usuario no encontrado" });
   } catch (err) {
     return responses.internalError(res, { error: "Internal Server Error" });
   }

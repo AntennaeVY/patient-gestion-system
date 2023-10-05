@@ -8,8 +8,15 @@ export function getAllPatientsGuard(
   next: NextFunction
 ) {
   try {
-    if (req.isAdmin || req.user?.role == "RECEPCIONIST") 
-	    next();
+    const skip = req.query.skip as string;
+    const take = req.query.take as string;
+
+    if ((skip && isNaN(parseInt(skip))) || (take && isNaN(parseInt(take))))
+      return responses.badRequest(res, {
+        error: "Párametros de paginación inválidos",
+      });
+
+    if (req.isAdmin || req.user?.role == "RECEPCIONIST") return next();
 
     return responses.unauthorized(res, {
       error: "No tienes permiso para realizar esta accion",

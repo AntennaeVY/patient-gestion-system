@@ -3,7 +3,7 @@ import responses from "../libs/http";
 import { TokenPayload, decodeAuthHeader, decodeToken } from "../libs/token";
 
 export function isAuthMiddleware(
-  req: Request & {user?: TokenPayload, isAdmin?: boolean},
+  req: Request & { user?: TokenPayload; isAdmin?: boolean },
   res: Response,
   next: NextFunction
 ) {
@@ -16,22 +16,22 @@ export function isAuthMiddleware(
           "No se encontró la cabecera de autenticación, asegúrate de iniciar sesión primero",
       });
 
-  const token = decodeAuthHeader(header);
-	const payload = decodeToken(token);
+    const token = decodeAuthHeader(header);
+    const payload = decodeToken(token);
 
-	if (!payload)
+    if (!payload)
       return responses.unauthorized(res, {
         error:
           "Token de autenticación inválido, asegúrate de iniciar sesión primero",
-      }); 
-	 
-	req.user = payload;
-	req.isAdmin = payload.role == "ADMIN";
+      });
+
+    req.user = payload;
+    req.isAdmin = payload.role == "ADMIN";
+
+    return next();
   } catch (err) {
     console.log(err);
 
     return responses.internalError(res, { error: "Internal Server Error" });
   }
-
-  next();
 }

@@ -8,9 +8,10 @@ export function getAllPatientsController(
   res: Response,
 ) {
   try {
-    // This needs to be paginated
-
-    getAllPatientsService()
+    const skip = parseInt(req.query.skip as string) || undefined;
+    const take = parseInt(req.query.take as string) || undefined;
+    
+    getAllPatientsService(skip, take)
       .then((patients) => {
         return responses.success(res, { patients: patients });
       })

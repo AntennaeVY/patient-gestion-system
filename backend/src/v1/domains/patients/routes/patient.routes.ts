@@ -5,6 +5,9 @@ import { getPatientGuard } from "../guards/getPatient.guard";
 import { getPatientController } from "../controllers/getPatient.controller";
 import { getAllPatientsGuard } from "../guards/getAllPatients.guard";
 import { getAllPatientsController } from "../controllers/getAllPatients.controller";
+import { updateAccountGuard } from "../../account/guards/updateAccount.guard";
+import { updatePatientGuard } from "../guards/updatePatient.guard";
+import { updatePatientController } from "../controllers/updatePatient.controller";
 
 const router = Router();
 
@@ -21,5 +24,13 @@ router.get(
   getPatientGuard,
   getPatientController
 );
+
+router.patch(
+  "/patients/:id",
+  isAuthMiddleware,
+  updateAccountGuard,
+  updatePatientGuard,
+  updatePatientController
+)
 
 export default router;
