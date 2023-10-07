@@ -1,39 +1,31 @@
 import { NextFunction, Request, Response } from "express";
 import { TokenPayload } from "../../../libs/token";
 import responses from "../../../libs/http";
-import { UpdatePatientDto } from "../dtos/updatePatient.dto";
-import { updatePatientService } from "../services/updatePatient.service";
-import {
-  PrismaClientKnownRequestError,
-} from "@prisma/client/runtime/library";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { UpdateServiceDto } from "../dtos/updateService.dto";
+import { updateServiceService } from "../services/updateService.service";
 
-export function updatePatientController(
+export function updateServiceController(
   req: Request & { user?: TokenPayload; isAdmin?: boolean },
   res: Response,
   next: NextFunction
 ) {
   try {
     const { id } = req.params;
-    const updatePatientDto = req.body as UpdatePatientDto;
+    const updateServiceDto = req.body as UpdateServiceDto;
 
-    updatePatientService(id, updatePatientDto)
+    updateServiceService(id, updateServiceDto)
       .then((result) => {
-        return responses.success(res, { patient: result });
+        return responses.success(res, { service: result });
       })
       .catch((err) => {
         console.log(err);
 
         if (err instanceof PrismaClientKnownRequestError) {
-          if (err.code == "P2002")
-            return responses.badRequest(res, {
-              error: "El valor ya se encuentra en uso",
-              fields: err.meta?.target,
-            });
-
           if (err.code == "P2016" || err.code == "P2025")
             return responses.notFound(res, {
-              error: "Usuario no encontrado"
-          })
+              error: "Servicio no encontrado",
+            });
         }
 
         return responses.internalError(res, { error: "Internal Server Error" });

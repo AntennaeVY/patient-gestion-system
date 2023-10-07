@@ -1,10 +1,14 @@
-import { Gender } from "@prisma/client";
+import { Gender, ServiceStatus } from "@prisma/client";
 
 const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]{7,15}$/;
 const emailRegex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const imageUrlRegex =
   /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)\.(jpg|png)$/;
+const timeRegex = /^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
+const priceRegex = /^[0-9]{1,15}\.[0-9]{2,2}$/;
+
+// ACCOUNTS
 
 export function isValidPhone(phone: string): boolean {
   return phoneRegex.test(phone);
@@ -104,7 +108,39 @@ export function isValidBirthday(birthday: string): boolean {
 }
 
 export function isValidGender(gender: string): boolean {
-  if (!Object.values(Gender).includes(gender as Gender)) 
+  if (typeof gender != "string" && !Object.values(Gender).includes(gender as Gender)) 
+    return false;
+
+  return true;
+}
+
+// SERVICES
+
+export function isValidServiceName(name: string): boolean {
+  if (typeof name !== "string" || name == "" || name.length > 50)
+    return false;
+
+  return true;
+}
+
+export function isValidServiceStatus(status: string): boolean {
+  if (typeof status != "string" && !Object.values(ServiceStatus).includes(status as ServiceStatus)) 
+    return false;
+
+  return true;
+}
+
+export function isValidServiceDuration(duration: string): boolean {
+  if (typeof duration != "string" && !timeRegex.test(duration))
+    return false;
+
+  return true;
+}
+
+export function isValidServicePrice(price: number): boolean {
+  const priceString = price.toString();
+
+  if (typeof price != "number" && !priceRegex.test(priceString))
     return false;
 
   return true;

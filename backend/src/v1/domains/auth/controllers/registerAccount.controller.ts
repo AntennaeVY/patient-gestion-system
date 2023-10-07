@@ -11,7 +11,7 @@ export function registerController(req: Request, res: Response) {
 
     registerAccountService(registerDto)
       .then(() => {
-        responses.created(res, { message: "Account created successfuly" });
+        responses.created(res, { message: "Cuenta creada exitosamente" });
       })
       .catch((err) => {
         console.log(err);
@@ -32,7 +32,6 @@ export function registerController(req: Request, res: Response) {
         });
       });
 
-    // continue with service
   } catch (err) {
     console.log(err);
 
