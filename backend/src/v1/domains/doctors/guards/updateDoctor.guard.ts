@@ -6,7 +6,7 @@ import {
   isValidDoctorCertificateURL,
   isValidDoctorSignatureURL,
   isValidDoctorSpecialization,
-  isValidServiceIds,
+  isValidUUIDv4,
 } from "../../../libs/validation";
 
 export async function updateDoctorGuard(
@@ -28,7 +28,7 @@ export async function updateDoctorGuard(
     if (specialization && !isValidDoctorSpecialization(specialization))
       fields.push("specialization");
 
-    if (services && !isValidServiceIds)
+    if (services && !services.every((id: string) => isValidUUIDv4(id)))
       fields.push("services")
 
     if (fields.length > 0)

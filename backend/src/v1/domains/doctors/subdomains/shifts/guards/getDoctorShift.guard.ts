@@ -1,14 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { TokenPayload } from "../../../libs/token";
-import responses from "../../../libs/http";
+import { TokenPayload } from "../../../../../libs/token";
+import responses from "../../../../../libs/http";
 
-export function getDoctorGuard(
+export function getDoctorShiftGuard(
   req: Request & { user?: TokenPayload; isAdmin?: boolean },
   res: Response,
   next: NextFunction
 ) {
   try {
-    if (req.user?.id == req.params.id || req.user?.role == "ADMIN" || req.user?.role == "RECEPCIONIST")
+    if (
+      req.user?.id == req.params.id ||
+      req.user?.role == "ADMIN" ||
+      req.user?.role == "RECEPCIONIST"
+    )
       return next();
 
     return responses.unauthorized(res, {

@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import { hashString } from "../../../libs/hash";
 import { exclude, prisma } from "../../../persistence/prisma/client";
 import { CreateDoctorDto } from "../dtos/createDoctor.dto";
@@ -45,8 +44,6 @@ export async function createDoctorService(createDoctorDto: CreateDoctorDto) {
       },
     }
   });
-
-  Prisma
 
   const doctorWithoutPassword = exclude(doctor, ["password"]);
 

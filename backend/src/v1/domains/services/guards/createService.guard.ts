@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { TokenPayload } from "../../../libs/token";
 
 import responses from "../../../libs/http";
-import { CreateServiceDto } from "../dtos/createService.dto";
-import { isValidServiceDuration, isValidServiceName, isValidServicePrice, isValidServiceStatus } from "../../../libs/validation";
+import { isValidServiceName, isValidServicePrice, isValidServiceStatus, isValidTime } from "../../../libs/validation";
 
 export async function createServiceGuard(
   req: Request & { user?: TokenPayload; isAdmin?: boolean },
@@ -21,7 +20,7 @@ export async function createServiceGuard(
 	if (!isValidServiceStatus(status))
 		fields.push("status");
 
-	if (!isValidServiceDuration(duration))
+	if (!isValidTime(duration))
 		fields.push("duration");
 
 	if (!isValidServicePrice(price))

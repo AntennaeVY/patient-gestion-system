@@ -3,10 +3,10 @@ import { TokenPayload } from "../../../libs/token";
 
 import responses from "../../../libs/http";
 import {
-  isValidServiceDuration,
   isValidServiceName,
   isValidServicePrice,
   isValidServiceStatus,
+  isValidTime,
 } from "../../../libs/validation";
 
 export async function updateServiceGuard(
@@ -23,7 +23,7 @@ export async function updateServiceGuard(
 
     if (status && !isValidServiceStatus(status)) fields.push("status");
 
-    if (duration && !isValidServiceDuration(duration)) fields.push("duration");
+    if (duration && !isValidTime(duration)) fields.push("duration");
 
     if (price && !isValidServicePrice(price)) fields.push("price");
 

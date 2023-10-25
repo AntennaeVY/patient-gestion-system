@@ -3,7 +3,7 @@ import { Role, AccountStatus } from "@prisma/client";
 
 import responses from "../../../libs/http";
 import { TokenPayload } from "../../../libs/token";
-import { isValidDoctorCertificateURL, isValidDoctorSignatureURL, isValidDoctorSpecialization, isValidServiceIds } from "../../../libs/validation";
+import { isValidDoctorCertificateURL, isValidDoctorSignatureURL, isValidDoctorSpecialization, isValidUUIDv4 } from "../../../libs/validation";
 
 export function createDoctorGuard(
   req: Request & { user?: TokenPayload; isAdmin?: boolean },
@@ -27,7 +27,7 @@ export function createDoctorGuard(
 	if (!isValidDoctorSpecialization(specialization))
 		fields.push("specialization");
 
-  if (!isValidServiceIds(services))
+  if (!services.every((id: string) => isValidUUIDv4(id)))
     fields.push("services")
 	
     if (fields.length > 0)

@@ -1,4 +1,4 @@
-import { Gender, ServiceStatus } from "@prisma/client";
+import { Gender, ServiceStatus, Weekday } from "@prisma/client";
 
 const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]{7,15}$/;
 const emailRegex =
@@ -135,8 +135,8 @@ export function isValidServiceStatus(status: string): boolean {
   return true;
 }
 
-export function isValidServiceDuration(duration: string): boolean {
-  if (typeof duration != "string" || !timeRegex.test(duration))
+export function isValidTime(time: string): boolean {
+  if (typeof time != "string" || !timeRegex.test(time))
     return false;
 
   return true;
@@ -172,6 +172,18 @@ export function isValidDoctorSpecialization(spec: string): boolean {
   return true;
 }
 
-export function isValidServiceIds(ids: string[]): boolean {
-  return ids.every(id => uuidv4Regex.test(id));
+export function isValidUUIDv4(id: string): boolean {
+  return uuidv4Regex.test(id);
+}
+
+// SHIFTS
+
+export function isValidWeekday(day: string): boolean {
+    if (
+      typeof day != "string" ||
+      !Object.values(Weekday).includes(day as Weekday)
+    )
+      return false;
+
+    return true;
 }
