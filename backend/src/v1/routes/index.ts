@@ -6,6 +6,7 @@ import servicesRoutes from "../domains/services/routes/services.routes";
 import doctorRoutes from "../domains/doctors/routes/doctor.routes";
 import recepcionistRoutes from "../domains/recepcionists/routes/recepcionist.routes";
 import doctorShiftsRoutes from "../domains/doctors/subdomains/shifts/routes/doctorShifts.routes"
+import appointmentRoutes from "../domains/appointments/routes/appointments.routes";
 
 const routes: IRouter[] = [
   authRoutes,
@@ -13,7 +14,8 @@ const routes: IRouter[] = [
   servicesRoutes,
   doctorRoutes,
   recepcionistRoutes,
-  doctorShiftsRoutes
+  doctorShiftsRoutes,
+  appointmentRoutes
 ];
 
 export default routes;

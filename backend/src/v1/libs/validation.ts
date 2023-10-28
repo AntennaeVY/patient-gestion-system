@@ -1,12 +1,11 @@
-import { Gender, ServiceStatus, Weekday } from "@prisma/client";
+import { AppointmentStatus, Gender, ServiceStatus, Weekday } from "@prisma/client";
 
 const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]{7,15}$/;
 const emailRegex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const imageUrlRegex =
-  /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)\.(jpg|png)$/;
-const pdfUrlRegex =
-    /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)\.pdf$/;
+const urlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/
+const imageUrlRegex = new RegExp(urlRegex.source + (/\.(jpg|png)$/).source);
+const pdfUrlRegex = new RegExp(urlRegex.source + (/\.pdf$/).source);
 const timeRegex = /^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
 const priceRegex = /^[0-9]{1,15}\.[0-9]{2,2}$/;
 const uuidv4Regex =
@@ -186,4 +185,34 @@ export function isValidWeekday(day: string): boolean {
       return false;
 
     return true;
+}
+
+// APPOINTMENTS
+
+export function isValidReportURL(url: string): boolean {
+    if (typeof url != "string" || !pdfUrlRegex.test(url)) return false;
+
+    return true;
+}
+
+export function isValidAppointmentStatus(status: string): boolean {
+  if (
+    typeof status != "string" ||
+    !Object.values(AppointmentStatus).includes(status as AppointmentStatus)
+  )
+    return false;
+
+  return true;
+}
+
+export function isValidDate(date: string): boolean {
+  const dateDate = new Date(date);
+
+  if (isNaN(Number(dateDate))) return false;
+
+  return true;
+}
+
+export function isValidRoom(room: string): boolean {
+  return room.length <= 10
 }

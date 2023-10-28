@@ -102,7 +102,7 @@ model Appointment {
   patient_id      String
   doctor_id       String
   description     String?           @db.VarChar(255)
-  report_url      String            @db.VarChar(255)  @unique
+  report_url      String?           @db.VarChar(255)
   status          AppointmentStatus @default(BOOKED)
   date            DateTime          @db.Date
   start_time      DateTime          @db.Time
