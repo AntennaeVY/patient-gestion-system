@@ -10,9 +10,29 @@ export async function deletePatientService(id: string) {
 
   if (!patient) return null;
 
-  await prisma.account.deleteMany({
-    where: { id: id, contact: { id: patient?.contact_info } },
-  });
+  const accountPromise = prisma.account.delete({
+    where: {
+      id: id
+    }
+  })
+
+  const contactPromise = prisma.contact.delete({
+    where: {
+      id: patient.contact_info
+    }
+  })
+
+  const appointmentsPromise = prisma.appointment.deleteMany({
+    where: {
+      patient_id: id
+    }
+  })
+
+  await prisma.$transaction([
+    accountPromise,
+    contactPromise,
+    appointmentsPromise,
+  ]);
 
   const patientWithoutPassword = exclude(patient, ["password"]);
 

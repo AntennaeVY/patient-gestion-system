@@ -105,8 +105,8 @@ model Appointment {
   report_url      String?           @db.VarChar(255)
   status          AppointmentStatus @default(BOOKED)
   date            DateTime          @db.Date
-  start_time      DateTime          @db.Time
-  end_time        DateTime          @db.Time
+  start_time      String            @db.VarChar(10)
+  end_time        String            @db.VarChar(10)
   room            String            @db.VarChar(50)
 
   // Prisma relations
@@ -119,8 +119,8 @@ model DoctorShift {
   id              String            @id               @default(uuid())
   doctor_id       String
   day             Weekday
-  start_time      DateTime          @db.Time
-  end_time        DateTime          @db.Time  
+  start_time      String            @db.VarChar(10)
+  end_time        String            @db.VarChar(10)  
 
   // Prisma relations
   doctor          Doctor            @relation(fields: [doctor_id], references: [id])
@@ -130,7 +130,7 @@ model Service {
   id              String            @id               @default(uuid())
   name            String            @db.VarChar(50)   
   status          ServiceStatus     
-  duration        DateTime          @db.Time()
+  duration        String            @db.VarChar(10)
   price           Decimal           @db.Money()
 
   // Prisma relations

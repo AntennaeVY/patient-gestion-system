@@ -11,13 +11,50 @@ export async function deleteDoctorService(id: string) {
 
   if (!doctor) return null;
 
-  await prisma.account.deleteMany({
+  const contactPromise = prisma.contact.delete({
     where: {
-      id: id,
-      contact: { id: doctor.contact_info },
-      doctor: { account_id: doctor.id },
+      id: doctor.contact_info,
     },
   });
+
+  const doctorPromise = prisma.doctor.delete({
+    where: {
+      account_id: doctor.id,
+    },
+  });
+
+  const accountPromise = prisma.account.delete({
+    where: {
+      id: id,
+    },
+  });
+
+  const doctorServicesPromise = prisma.doctorsOnServices.deleteMany({
+    where: {
+      doctor_id: id,
+    },
+  });
+
+  const doctorShiftsPromise = prisma.doctorShift.deleteMany({
+    where: {
+      doctor_id: id,
+    },
+  });
+
+  const doctorAppointments = prisma.appointment.deleteMany({
+    where: {
+      doctor_id: id,
+    },
+  });
+
+  await prisma.$transaction([
+    contactPromise,
+    doctorPromise,
+    accountPromise,
+    doctorServicesPromise,
+    doctorShiftsPromise,
+    doctorAppointments,
+  ]);
 
   const doctorWithoutPassword = exclude(doctor, ["password"]);
 

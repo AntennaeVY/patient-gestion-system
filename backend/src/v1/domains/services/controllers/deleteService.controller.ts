@@ -14,16 +14,14 @@ export function deleteServiceController(
 
     deleteServiceService(id)
       .then((service) => {
+        if (!service)
+          return responses.notFound(res, { error: "Servicio no encontrado" });
+
         return responses.success(res, { service: service });
       })
       .catch((err) => {
         console.log(err);
-
-        if (err instanceof PrismaClientKnownRequestError) {
-          if (err.code == "P2016" || err.code == "P2025")
-            return responses.notFound(res, { error: "Servicio no encontrado" });
-        }
-
+        
         return responses.internalError(res, { error: "Internal Server Error" });
       });
   } catch (err) {

@@ -10,9 +10,19 @@ export async function deleteRecepcionistService(id: string) {
 
   if (!recepcionist) return null;
 
-  await prisma.account.deleteMany({
-    where: { id: id, contact: { id: recepcionist.contact_info } },
+  const accountPromise = prisma.account.delete({
+    where: {
+      id: id,
+    },
   });
+
+  const contactPromise = prisma.contact.delete({
+    where: {
+      id: recepcionist.contact_info,
+    },
+  });
+
+  await prisma.$transaction([accountPromise, contactPromise]);
 
   const recepcionistWithoutPassword = exclude(recepcionist, ["password"]);
 
