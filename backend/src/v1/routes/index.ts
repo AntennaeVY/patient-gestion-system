@@ -1,5 +1,6 @@
 import { IRouter } from "express";
 
+import accountRoutes from "../domains/account/routes/account.routes";
 import authRoutes from "../domains/auth/routes/auth.routes";
 import patientRoutes from "../domains/patients/routes/patient.routes";
 import servicesRoutes from "../domains/services/routes/services.routes";
@@ -9,6 +10,7 @@ import doctorShiftsRoutes from "../domains/doctors/subdomains/shifts/routes/doct
 import appointmentRoutes from "../domains/appointments/routes/appointments.routes";
 
 const routes: IRouter[] = [
+  accountRoutes,
   authRoutes,
   patientRoutes,
   servicesRoutes,

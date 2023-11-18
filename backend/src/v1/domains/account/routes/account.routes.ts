@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { isAuthMiddleware } from "../../../middlewares/isAuth";
 import { getAccountController } from "../controllers/getAccount.controller";
-import { isAdminMiddleware } from "../../../middlewares/isAdmin";
+import { getAccountGuard } from "../guards/getAccount.guard";
 
 const router = Router();
 
 router.get(
   "/accounts/:id",
   isAuthMiddleware,
-  isAdminMiddleware,
+  getAccountGuard,
   getAccountController
 );
 
