@@ -36,7 +36,7 @@ export function isValidImageURL(url: string): boolean {
 }
 
 export function isValidId(id: string): boolean {
-  if (typeof id !== "string" || id == "" || id.length > 8) 
+  if (typeof id !== "string" || id.length != 8) 
     return false;
 
   return true;
