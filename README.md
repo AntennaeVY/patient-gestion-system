@@ -164,10 +164,36 @@ De momento hay solo 4 roles principales en la aplicacion, la jerarquia de roles 
 	```
 
 	#### Validaciones
-	- `id`:  Se utilizara la cedula, debe cumplir con el patron `[0-9]{8,8}`
-	- `name`: 
+	- `id`:  Se utilizara la cedula, debe ser un numero decimal de exactamente 8 digitos
+		- *Ejemplos*: 
+			- ✅ `27485932`, `06834932`
+			- ❌ `123`, `ABC123`
+	- `name`: Se admiten nombres que no excedan los 50 caracteres
+	- `last_name`: Se admiten apellidos que no excedan los 50 caracteres
+	- `email`: Se admite cualquier email que cumpla con el estandar internacional
+	- `password`: No debe ser menor a 8 caracteres y no debe exceder los 255 caracteres
+	- `role (opcional)`: Es ignorado, se coloca automaticamente al utilizar los respectivos endpoints para cada rol. Debe ser uno de los siguientes `"ADMIN"`, `"RECEPCIONIST"`, `"DOCTOR"` o `"PATIENT"`
+	- `avatar_url (opcional)`: Por defecto es un *[avatar generico](https://i.imgur.com/Zs3EoeR.png')*. Debe apuntar al enlace web de un archivo con extension `.png` o `.jpg`
+		- *Ejemplos*:
+			- ✅ `https://i.imgur.com/Zs3EoeR.png'`, `http://ejemplo.com/foto.jpg`
+			- ❌ `file://foto.png`, `http://ejemplo.com`, `http://pagina.net/documento.pdf`
+	- `contact_info`: 
+		- `country`: No debe exceder los 50 caracteres
+		- `state`: No debe exceder los 50 caracteres
+	    - `city`: No debe exceder los 50 caracteres
+	    - `street`: No debe exceder los 255 caracteres
+	    - `suite`: No debe exceder los 50 caracteres
+	    - `primary_phone`: Debe ser un numero de telefono valido con o sin codigo de area.
+			- *Ejemplos*:
+				- ✅ `+5812345678`, `+(58)12345678`, `0412-1234567`
+				- ❌ `123`, `+[58]1234567`
+		- `secondary_phone (opcional)`: Igual que `primary_phone`	
+	- `birthday`: Debe seguir el formato `YYYY-MM-DD`
+	- `gender`: Debe ser uno de `"M"` o `"F"`
+	- `status`: Es ignorado. Solo puede ser cambiado por `ADMIN` o `RECEPCIONIST`. Debe ser uno de `"UNVERIFIED"` o `"VERIFIED"`
 
-
+	#### Respuestas
+	
 - 
 
 #### Patients
