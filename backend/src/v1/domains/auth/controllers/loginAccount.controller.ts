@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { LoginAccountDto } from "../dtos/loginAccount.dto";
 import { loginAccountService } from "../services/loginAccount.service";
 import responses from "../../../libs/http";
+import { TokenPayload, decodeToken } from "../../../libs/token";
 
 export function loginAccountController(req: Request, res: Response) {
   try {
@@ -18,6 +19,11 @@ export function loginAccountController(req: Request, res: Response) {
             error: data,
           });
 
+        if (data) {
+          const payload = decodeToken(data) as TokenPayload;
+          res.setHeader("X-Role", payload.role);
+        }
+      
         return responses.success(res, { token: data });
       })
       .catch((err) => {

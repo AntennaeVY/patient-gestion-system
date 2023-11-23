@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*", exposedHeaders: "X-Role"}));
 app.use("/api/v1/", routes);
 
 app.listen(PORT, () => {
