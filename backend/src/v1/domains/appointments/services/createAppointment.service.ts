@@ -10,19 +10,10 @@ export async function createAppointmentService(
 
   const id = randomUUID();
 
-  const connectServices = services.map((service_id) => {
-    return {
-      appointment_id_service_id: {
-    	appointment_id: id,
-        service_id: service_id,
-      },
-    };
-  });
-
-  const appointment = await prisma.appointment.create({
+  const appointmentPromise = prisma.appointment.create({
     data: {
       ...appointmentData,
-	  id: id,
+      id: id,
       doctor: {
         connect: {
           account_id: doctor_id,
@@ -33,11 +24,20 @@ export async function createAppointmentService(
           id: patient_id,
         },
       },
-	  services: {
-		connect: connectServices
-	  }
     },
   });
 
-  return appointment;
+  const appointmentOnServicesPromises = services.map((service_id) => {
+    return prisma.appointmentsOnServices.create({
+      data: {
+        appointment_id: id,
+        service_id: service_id,
+      },
+    });
+  });
+
+  await prisma.$transaction([
+    appointmentPromise,
+    ...appointmentOnServicesPromises,
+  ]);
 }

@@ -131,7 +131,7 @@ model Service {
   name            String            @db.VarChar(50)   
   status          ServiceStatus     
   duration        String            @db.VarChar(10)
-  price           Decimal           @db.Money()
+  price           Decimal           @db.Decimal()
 
   // Prisma relations
   appointments    AppointmentsOnServices[]

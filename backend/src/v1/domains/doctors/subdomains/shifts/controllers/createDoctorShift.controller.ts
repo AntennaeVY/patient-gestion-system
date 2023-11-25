@@ -6,7 +6,7 @@ import responses from "../../../../../libs/http";
 export function createDoctorShiftController(req: Request, res: Response) {
   try {
     const createDoctorShiftDto = req.body as CreateDoctorShiftDto;
-	const doctor_id = req.params.id;
+    const doctor_id = req.params.id;
 
     createDoctorShiftService(doctor_id, createDoctorShiftDto)
       .then(() => {

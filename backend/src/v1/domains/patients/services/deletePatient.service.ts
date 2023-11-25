@@ -29,9 +29,9 @@ export async function deletePatientService(id: string) {
   })
 
   await prisma.$transaction([
+    appointmentsPromise,
     accountPromise,
     contactPromise,
-    appointmentsPromise,
   ]);
 
   const patientWithoutPassword = exclude(patient, ["password"]);
