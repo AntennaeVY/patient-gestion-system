@@ -1,12 +1,12 @@
 import { prisma } from "../../../persistence/prisma/client";
 
 export async function getAllAppointmentsService(options: {
-  skip?: number;
-  take?: number;
+  page: number;
+  size: number;
   doctor_id?: string;
   patient_id?: string;
 }) {
-  const { skip, take, doctor_id, patient_id } = options;
+  const { page, size, doctor_id, patient_id } = options;
 
   const appointments = await prisma.appointment.findMany({
     where: {
@@ -44,11 +44,23 @@ export async function getAllAppointmentsService(options: {
         },
       },
     },
-    skip: skip,
-    take: take,
+    skip: size * (page - 1),
+    take: size,
   });
+
+  const count = await prisma.appointment.count();
+  const pages = count / size;
 
   if (appointments.length == 0) return null;
 
-  return appointments;
+  return {
+    pagination: {
+      total_records: count,
+      current_page: page,
+      total_pages: pages,
+      next_page: page == pages ? null : page + 1,
+      previous_page: page == 1 ? null : page - 1,
+    },
+    appointments: appointments,
+  };
 }

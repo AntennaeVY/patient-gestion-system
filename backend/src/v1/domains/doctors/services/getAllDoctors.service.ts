@@ -1,12 +1,28 @@
 import { exclude, prisma } from "../../../persistence/prisma/client";
 
-export async function getAllDoctorsService(skip?: number, take?: number, options?: any) {
+export async function getAllDoctorsService(page: number, size: number, options?: any) {
   const doctors = await prisma.account.findMany({
     where: { role: "DOCTOR" },
-    skip: skip,
-    take: take,
+    skip: size * (page - 1),
+    take: size,
     ...options
   });
 
-  return doctors.map((doctor) => exclude(doctor, ["password"]));
+  const count = await prisma.doctor.count();
+  const pages = count / size;
+
+  if (doctors.length == 0) return null;
+
+  const doctorsWithoutPassword = doctors.map((doctor) => exclude(doctor, ["password"]));
+
+  return {
+    pagination: {
+      total_records: count,
+      current_page: page,
+      total_pages: pages,
+      next_page: page == pages ? null : page + 1,
+      previous_page: page == 1 ? null : page - 1,
+    },
+    doctors: doctorsWithoutPassword,
+  };
 }

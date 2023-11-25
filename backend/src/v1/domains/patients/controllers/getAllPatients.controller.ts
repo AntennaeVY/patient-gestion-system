@@ -8,12 +8,15 @@ export function getAllPatientsController(
   res: Response,
 ) {
   try {
-    const skip = parseInt(req.query.skip as string) || undefined;
-    const take = parseInt(req.query.take as string) || undefined;
+    const page = parseInt(req.query.page as string) || 1;
+    const size = parseInt(req.query.size as string) || 5;
     
-    getAllPatientsService(skip, take)
-      .then((patients) => {
-        return responses.success(res, { patients: patients });
+    getAllPatientsService(page, size)
+      .then((result) => {
+        if (!result)
+          return responses.notFound(res, { error: "Pacientes no encontrados" });
+
+        return responses.success(res, result);
       })
       .catch((err) => {
         console.log(err);

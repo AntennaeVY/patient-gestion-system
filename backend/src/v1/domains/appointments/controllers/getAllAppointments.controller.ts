@@ -8,17 +8,17 @@ export function getAllAppointmentsController(
   res: Response
 ) {
   try {
-    const skip = parseInt(req.query.skip as string) || undefined;
-    const take = parseInt(req.query.take as string) || undefined;
+    const page = parseInt(req.query.page as string) || 1;
+    const size = parseInt(req.query.size as string) || 5;
     const doctor_id = req.query.doctor_id as string;
     const patient_id = req.query.patient_id as string;
 
-    getAllAppointmentsService({ doctor_id, patient_id, skip, take })
-      .then((appointments) => {
-        if (!appointments)
+    getAllAppointmentsService({ doctor_id, patient_id, page, size })
+      .then((result) => {
+        if (!result)
           return responses.notFound(res, { error: "Citas no encontradas" });
 
-        return responses.success(res, { appointments: appointments });
+        return responses.success(res, result);
       })
       .catch((err) => {
         console.log(err);

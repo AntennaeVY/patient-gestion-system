@@ -8,18 +8,15 @@ export function getAllRecepcionistsController(
   res: Response,
 ) {
   try {
-    const skip = parseInt(req.query.skip as string) || undefined;
-    const take = parseInt(req.query.take as string) || undefined;
+    const page = parseInt(req.query.page as string) || 1;
+    const size = parseInt(req.query.size as string) || 5;
     
-    getAllRecepcionistsService(skip, take)
-      .then((recepcionists) => {
-        return responses.success(res, { recepcionists: recepcionists });
-      })
-      .catch((err) => {
-        console.log(err);
+    getAllRecepcionistsService(page, size).then((result) => {
+      if (!result)
+        return responses.notFound(res, { error: "Recepcionistas no encontrados" });
 
-        return responses.internalError(res, { error: "Internal Server Error" });
-      });
+      return responses.success(res, result);
+    });
   } catch (err) {
     console.log(err);
 
