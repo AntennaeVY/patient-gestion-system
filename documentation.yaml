@@ -1,0 +1,259 @@
+openapi: 3.0.3
+info:
+  title: Swagger EvalueX - OpenAPI 3.0.3
+  description: |-
+    This is is a website destined to be a place so an imangology clinic can have there clients and doctors gergister and learn about the services, appointment dates and medical reports
+  termsOfService: 
+  contact: 
+    email: daniel@cmdevaluex.com
+  license: 
+    name: 
+    url: 
+  version: 1.0
+servers:
+  - url: https://cmdevaluex.com
+tags:
+  - name: clinic
+    description: Imagology clinic
+    externalDocs:
+      description: Find out more
+      url: https://github.com/OmarErnest/evaluex
+  - name: doctors
+    description: Access to medical history of their patients and appointments
+  - name: patient
+    description: Access to own medical history, and appointments historical and due
+paths:
+#login & signup
+  /api/v1/auth/register/:
+    post:
+      tags:
+        - sign up evaluex
+      summary: Add a new patient to the clinic
+      description: Add a new patient to the clinic
+      operationId: addPatient
+      requestBody:
+        description: Create a new patient for the clinic
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/patient'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/patient'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/patient'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/patient'
+        '405':
+          description: Invalid input
+      security:
+        - evaluex_auth:
+            - write:user
+            - read:user
+  /api/v1/auth/login/:
+    post:
+      tags:
+        - login evaluex
+      summary: log into the app
+      description: log into the app
+      operationId: logintoApp
+      requestBody:
+        description: Allow any user to log into the app
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/user'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/user'
+        '405':
+          description: Invalid input
+      security:
+        - evaluex_auth:
+            - write:user
+            - read:user
+  /api/v1/auth/forgot/:
+    post:
+      tags:
+        - reset evaluex
+      summary: reset user password for the app
+      description: Let users change their forgoten password via a code to their e-mail
+      operationId: reserAppPassword
+      requestBody:
+        description: enter your user e-mail
+        content: user e-mail
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/user'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/user'
+        '405':
+          description: Invalid input
+      security:
+        - evaluex_auth:
+            - write:user
+            - read:user
+  /api/v1/auth/reset/:
+    patch:
+    tags:
+        - user
+    summary: Update user password
+      description: This can be done by overwritting the old password
+      operationId: updateUser
+      parameters:
+        - name: password
+          in: path
+          description: password that needs to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user password in the app
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/user'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/user'
+        '404':
+          description: User not found          
+        '405':
+          description: Validation exception
+      security:
+        - evaluex_auth:
+            - write:user
+            - read:user
+#patient tab
+  /api/v1/patients?skip=&take=:
+    get:
+      tags:
+        - patient
+      summary: Finds users by status
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findPatientByStatus
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: available
+            enum:
+              - available
+              - pending
+              - sold
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/patient'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/patient'
+        '400':
+          description: Invalid status value
+      security:
+        - evaluex_auth:
+            - write:patient
+            - read:patient
+  /api/v1/patients/[id]/:
+    get:
+      tags:
+        - patient
+      summary: Get a single patients information
+      description: Show the patients their own personal data and appointments opened
+      operationId: findPatientByStatus
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: available
+            enum:
+              - available
+              - pending
+              - sold
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Patient'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Patient'
+        '400':
+          description: Invalid status value
+      security:
+        - evaluex_auth:
+            - write:patient
+            - read:patient
